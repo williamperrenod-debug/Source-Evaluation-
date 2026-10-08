@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Student practice activity for evaluating information sources by authority, evidence, relevance, and currency.">
+  <title>Source Evaluation | Student Practice</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <p class="eyebrow">Information Literacy Activity</p>
+      <h1>Source Evaluation</h1>
+      <p class="subtitle">Student Practice: Authority, Evidence, Relevance, and Currency</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro-card" aria-labelledby="activity-title">
+      <h2 id="activity-title">Evaluate the Source</h2>
+      <p>
+        Practice evaluating information sources by considering four factors:
+        <strong>authority</strong>, <strong>evidence</strong>, <strong>relevance</strong>,
+        and <strong>currency</strong>.
+      </p>
+      <p>
+        Read each scenario carefully and choose the response that best evaluates
+        the source for the information need described.
+      </p>
+      <button id="start-button" class="primary-button" type="button">Start Activity</button>
+    </section>
+
+    <section id="activity" class="activity-card hidden" aria-labelledby="question-heading">
+      <div class="progress-row">
+        <span id="progress-text">Question 1 of 10</span>
+        <span id="score-text">Score: 0</span>
+      </div>
+
+      <div class="progress-bar" aria-label="Activity progress">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+
+      <p id="criterion-label" class="criterion-label">Criterion: Authority</p>
+      <h2 id="question-heading">Question text will appear here.</h2>
+
+      <div id="source-card" class="source-card">
+        <h3 id="source-title">Source</h3>
+        <p id="source-description"></p>
+      </div>
+
+      <fieldset id="answer-options" class="answer-options">
+        <legend>Choose the best evaluation</legend>
+      </fieldset>
+
+      <div id="feedback" class="feedback hidden" role="status" aria-live="polite"></div>
+
+      <div class="controls">
+        <button id="submit-button" class="primary-button" type="button">Check Answer</button>
+        <button id="next-button" class="secondary-button hidden" type="button">Next Question</button>
+      </div>
+    </section>
+
+    <section id="results" class="results-card hidden" aria-labelledby="results-heading">
+      <p class="eyebrow">Activity Complete</p>
+      <h2 id="results-heading">Your Results</h2>
+      <p id="final-score"></p>
+      <p id="results-message"></p>
+      <button id="restart-button" class="primary-button" type="button">Try Again</button>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Source Evaluation • Information Literacy Student Practice</p>
+    </div>
+  </footer>
+
+  <script src="data/questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
