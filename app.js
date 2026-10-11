@@ -232,11 +232,18 @@ document.addEventListener("DOMContentLoaded", () => {
       score++;
     }
 
-    const feedback = question.feedback || {};
-    const message = isCorrect
-      ? (feedback.correct || "Correct. You selected the best evaluation.")
-      : (feedback.incorrect ||
-          "Not quite. Review the source information and consider why another option is stronger.");
+  const feedback = question.feedback || {};
+    
+    // Determine the correct message based on whether the selected index has tailored feedback
+    let message = "";
+    if (isCorrect) {
+      message = feedback.correct || "Correct. You selected the best evaluation.";
+    } else {
+      // Pull specific feedback for the chosen option, or fall back to a default message
+      message = (feedback.options && feedback.options[selectedIndex]) 
+        || feedback.incorrect 
+        || "Not quite. Review the source information and consider why another option is stronger.";
+    }
 
     feedbackBox.replaceChildren();
 
