@@ -1,1 +1,491 @@
-/* Stage 2: visual design will be added here. */
+
+/* =========================================
+   Source Evaluation: Student Practice
+   ========================================= */
+
+:root {
+  --color-primary: #234f70;
+  --color-primary-hover: #183b55;
+  --color-secondary: #eaf0f5;
+  --color-page: #f4f7fa;
+  --color-card: #ffffff;
+  --color-text: #263442;
+  --color-muted: #596979;
+  --color-border: #d4dee7;
+  --color-focus: #1976d2;
+
+  --color-success: #21643b;
+  --color-success-bg: #edf7ef;
+  --color-success-border: #83bd91;
+
+  --color-error: #922d32;
+  --color-error-bg: #fff0f0;
+  --color-error-border: #d99a9a;
+
+  --color-warning: #79540c;
+  --color-warning-bg: #fff8e6;
+
+  --shadow-card: 0 3px 12px rgb(29 52 73 / 7%);
+  --radius-card: 12px;
+  --content-width: 850px;
+}
+
+/* ----- Reset and base styles ----- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-page);
+  color: var(--color-text);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.3;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+}
+
+h3 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+
+/* ----- Layout ----- */
+
+.container {
+  width: min(calc(100% - 32px), var(--content-width));
+  margin-inline: auto;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ----- Header ----- */
+
+.site-header {
+  padding: 42px 0 38px;
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.site-header h1 {
+  margin: 0 0 8px;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.eyebrow {
+  margin-bottom: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.site-header .eyebrow {
+  color: #dce9f2;
+}
+
+.subtitle {
+  max-width: 680px;
+  margin-bottom: 0;
+  color: #edf4f8;
+  font-size: 1.08rem;
+}
+
+/* ----- Main content cards ----- */
+
+main.container {
+  padding-top: 32px;
+  padding-bottom: 42px;
+}
+
+.intro-card,
+.activity-card,
+.results-card {
+  padding: clamp(22px, 5vw, 36px);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.intro-card p,
+.results-card p {
+  max-width: 720px;
+}
+
+.intro-card h2,
+.results-card h2 {
+  color: var(--color-primary);
+}
+
+.intro-card .primary-button {
+  margin-top: 10px;
+}
+
+/* ----- Buttons ----- */
+
+.primary-button,
+.secondary-button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: 2px solid transparent;
+  border-radius: 7px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.primary-button {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.secondary-button {
+  border-color: var(--color-border);
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.secondary-button:hover:not(:disabled) {
+  border-color: #a9bdcc;
+  background: #dce6ee;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* ----- Progress indicators ----- */
+
+.progress-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+  color: var(--color-muted);
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+#score-text {
+  color: var(--color-primary);
+}
+
+.progress-bar {
+  height: 10px;
+  margin-bottom: 26px;
+  overflow: hidden;
+  background: #e4eaf0;
+  border-radius: 999px;
+}
+
+.progress-fill {
+  width: 0;
+  height: 100%;
+  background: #4c819f;
+  border-radius: inherit;
+  transition: width 0.25s ease;
+}
+
+/* ----- Criterion and question ----- */
+
+.criterion-label {
+  display: inline-block;
+  margin: 0 0 14px;
+  padding: 5px 11px;
+  border-radius: 5px;
+  background: #eaf2f8;
+  color: var(--color-primary);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+#question-heading {
+  margin-bottom: 22px;
+  font-size: clamp(1.25rem, 3vw, 1.55rem);
+  overflow-wrap: anywhere;
+}
+
+/* ----- Source information ----- */
+
+.source-card {
+  margin: 0 0 28px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-left: 5px solid #6d91aa;
+  border-radius: 7px;
+  background: #f8fafc;
+}
+
+.source-card h3 {
+  margin-bottom: 8px;
+  color: var(--color-primary);
+}
+
+.source-card p {
+  margin-bottom: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ----- Multiple-choice answers ----- */
+
+.answer-options {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.answer-options legend {
+  margin-bottom: 14px;
+  padding: 0;
+  font-weight: 700;
+}
+
+.answer-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 15px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.answer-option:hover {
+  border-color: #8ba8bc;
+  background: #f7fafc;
+}
+
+.answer-option input[type="radio"] {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 4px 0 0;
+  accent-color: var(--color-primary);
+}
+
+.answer-option span {
+  flex: 1;
+  min-width: 0;
+}
+
+.answer-option:has(input:checked) {
+  border-color: var(--color-primary);
+  background: #edf4f9;
+}
+
+.answer-option:has(input:disabled) {
+  cursor: default;
+}
+
+.answer-option.answer-correct {
+  border-color: var(--color-success-border);
+  background: var(--color-success-bg);
+}
+
+.answer-option.answer-incorrect {
+  border-color: var(--color-error-border);
+  background: var(--color-error-bg);
+}
+
+/* ----- Feedback ----- */
+
+.feedback {
+  margin-top: 22px;
+  padding: 18px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+}
+
+.feedback strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.feedback p {
+  margin-bottom: 0;
+}
+
+.feedback-correct {
+  border-color: var(--color-success-border);
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.feedback-incorrect {
+  border-color: var(--color-error-border);
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.feedback-warning {
+  border-color: #e3c878;
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+/* ----- Activity controls ----- */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.controls button {
+  min-width: 140px;
+}
+
+/* ----- Results ----- */
+
+.results-card {
+  text-align: left;
+}
+
+.results-card .eyebrow {
+  color: var(--color-muted);
+}
+
+#final-score {
+  margin: 20px 0 12px;
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+#results-message {
+  margin-bottom: 24px;
+}
+
+.data-error {
+  margin-top: 18px;
+  padding: 14px;
+  border: 1px solid var(--color-error-border);
+  border-radius: 7px;
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+/* ----- Footer ----- */
+
+.site-footer {
+  padding: 22px 0;
+  border-top: 1px solid var(--color-border);
+  background: #eaf0f5;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.site-footer p {
+  margin-bottom: 0;
+}
+
+/* ----- Small screens and reduced motion ----- */
+
+@media (max-width: 560px) {
+  .site-header {
+    padding: 30px 0;
+  }
+
+  main.container {
+    padding-top: 20px;
+    padding-bottom: 28px;
+  }
+
+  .intro-card,
+  .activity-card,
+  .results-card {
+    padding: 20px;
+  }
+
+  .answer-option {
+    padding: 13px;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .controls button,
+  .intro-card .primary-button,
+  .results-card .primary-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
