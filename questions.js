@@ -82,7 +82,7 @@ const questions = [
   {
     id: "Q04",
     criterion: "Evidence",
-    scenario: "A website claims that a particular study method improves exam scores by 40%. Which action would best help you evaluate this claim?",
+    scenario: "A blog claims that a particular study method improves exam scores by 40%. Which action would best help you evaluate this claim?",
     source: {
       title: "Study Success Blog",
       description: "The blog makes a numerical claim but does not identify the study, explain how the percentage was calculated, or link to supporting research."
