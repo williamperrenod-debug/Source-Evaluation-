@@ -97,7 +97,7 @@ const questions = [
       correct: "Correct. Information creation is a process. Statistics and claims must be traced back to their original methodology and context to determine if the evidence is robust.",
       options: [
         "A precise number can be fabricated, exaggerated, or stripped of vital context. It does not replace verifiable methodology.",
-        "Correct. Information creation is a process. Statistics and claims must be traced back to their original methodology and context to determine if the evidence is robust.",
+        "Correct. Published claims and statistics are created through a specific process and various methods; you need to trace them back to their origins to check if the evidence holds up.",
         "Dismissing a source solely based on its format (a blog) is a generalization; instead, evaluate whether the source provides verifiable paths to its evidence."
       ]
     }
