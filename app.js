@@ -325,11 +325,5 @@ document.addEventListener("DOMContentLoaded", () => {
   nextButton.addEventListener("click", nextQuestion);
   restartButton.addEventListener("click", startActivity);
 
-  // ----- Back to previous page control -----
-  const backPageButton = document.getElementById("back-page-button");
-  if (backPageButton) {
-    backPageButton.addEventListener("click", () => {
-      window.history.back();
-    });
-  }
+
 }); 
