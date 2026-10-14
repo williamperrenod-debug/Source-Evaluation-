@@ -319,9 +319,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ----- Connect the controls -----
+ // ----- Connect the controls -----
   startButton.addEventListener("click", startActivity);
   submitButton.addEventListener("click", checkAnswer);
   nextButton.addEventListener("click", nextQuestion);
   restartButton.addEventListener("click", startActivity);
-});
+
+  // ----- Back to previous page control -----
+  const backPageButton = document.getElementById("back-page-button");
+  if (backPageButton) {
+    backPageButton.addEventListener("click", () => {
+      window.history.back();
+    });
+  }
+}); 
