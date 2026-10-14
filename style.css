@@ -114,6 +114,16 @@ h3 {
   letter-spacing: -0.035em;
 }
 
+/* Add the header link styling here */
+.site-header h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-header h1 a:hover {
+  text-decoration: underline;
+}
+
 .eyebrow {
   margin-bottom: 8px;
   font-size: 0.78rem;
