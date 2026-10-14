@@ -19,7 +19,7 @@ const questions = [
     ],
     correctAnswer: 1,
     feedback: {
-      correct: "Correct. In line with the ACRL Framework, authority is contextual and demonstrated through recognized expertise and peer review. The public health agency's researchers possess subject-matter expertise relevant to environmental health.",
+      correct: "Correct. Authority is contextual and demonstrated through recognized expertise and peer review. The public health agency's researchers possess subject-matter expertise relevant to environmental health.",
       options: [
         "A local resident's personal experience provides valuable community perspective, but living in an area does not automatically establish scientific expertise regarding environmental causes.",
         "Correct. In line with the ACRL Framework, authority is contextual and demonstrated through recognized expertise and peer review. The public health agency's researchers possess subject-matter expertise relevant to environmental health.",
