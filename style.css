@@ -558,3 +558,41 @@ input:focus-visible {
   margin-bottom: 4px;
 }
 
+
+/* Student Success Prep Guide Accordion */
+.prep-accordion {
+  background-color: #f4f6f8;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  text-align: left;
+}
+
+.prep-accordion summary {
+  cursor: pointer;
+  color: #1d4ed8;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.prep-accordion summary:hover {
+  color: #1e40af;
+}
+
+.prep-content {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.prep-content ul {
+  padding-left: 20px;
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+
+.prep-content li {
+  margin-bottom: 4px;
+}
