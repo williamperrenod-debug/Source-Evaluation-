@@ -154,31 +154,29 @@ const questions = [
   // =========================================
   // INFORMATION HAS VALUE / RELEVANCE
   // =========================================
-  {
+ {
     id: "Q07",
     criterion: "Relevance",
-    scenario: "Your assignment asks how remote work affects employee collaboration in U.S. hospitals. Which source is most directly relevant?",
+    scenario: "Your assignment asks how generative artificial intelligence impacts academic integrity in undergraduate computer science courses at U.S. universities. Which source is most directly relevant?",
     source: {
       title: "Three research sources",
-      description: "Source A: A study of remote work and collaboration among hospital employees in the United States. Source B: An article about remote work and software developers in another country. Source C: A general article about the history of hospitals."
+      description: "Source A: A study of generative AI tool usage and code plagiarism among undergraduate computer science students in the United States. Source B: An article about AI automation in manufacturing plants in another country. Source C: A general article about the history of the internet."
     },
     options: [
       "Source A, because its population, setting, and topic closely match the research question.",
-      "Source B, because any source about remote work answers the question equally well.",
-      "Source C, because hospital history provides background on the subject."
+      "Source B, because any source about artificial intelligence answers the question equally well.",
+      "Source C, because internet history provides background on the subject."
     ],
     correctAnswer: 0,
     feedback: {
       correct: "Correct. Relevance is determined by how closely a source's scope, population, and context align with your specific research parameters.",
       options: [
         "Correct. Relevance is determined by how closely a source's scope, population, and context align with your specific research parameters.",
-        "Software developers in a different national and industrial context experience drastically different operational constraints, limiting direct relevance to U.S. hospital workers.",
-        "While hospital history offers broad contextual background, it fails to address the specific intersection of modern remote work and collaboration."
+        "Industrial manufacturing in a different national context involves completely different operational environments, limiting direct relevance to undergraduate academic integrity.",
+        "While internet history offers broad contextual background, it fails to address the specific intersection of modern generative AI and undergraduate academic policies."
       ]
     }
   },
-
-  {
     id: "Q08",
     criterion: "Relevance",
     scenario: "You are writing a college research paper about the effects of urban green spaces on neighborhood health. How should you evaluate a well-written article about the history of city parks that lacks health data?",
