@@ -30,17 +30,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const questionBank =
     typeof questions !== "undefined"
       ? questions
-      : window.questions;
+      : window.questions || [];
 
   const dragDropBank =
     typeof dragDropQuestions !== "undefined"
       ? dragDropQuestions
       : window.dragDropQuestions || [];
 
-  // Combine both banks into a unified activity pool, tagging types appropriately
+  // Combine both banks into a unified activity pool, safely defaulting question types
   const combinedQuestionBank = [
-    ...questionBank.map(q => ({ ...q, questionType: "mc" })),
-    ...dragDropBank.map(q => ({ ...q, questionType: "drag-drop" }))
+    ...questionBank.map(q => ({ ...q, questionType: q.questionType || "mc" })),
+    ...dragDropBank.map(q => ({ ...q, questionType: q.questionType || "drag-drop" }))
   ];
 
   const validCriteria = [
@@ -68,6 +68,15 @@ document.addEventListener("DOMContentLoaded", () => {
         return `Question ${i + 1} has missing basic criteria or scenarios.`;
       }
 
+      // Validate that the criterion string matches one of our recognized values case-insensitively
+      const matchesCriterion = validCriteria.some(
+        criterion => criterion.toLowerCase() === question.criterion.trim().toLowerCase()
+      );
+
+      if (!matchesCriterion) {
+        return `Question ${i + 1} has an unrecognized criterion: "${question.criterion}"`;
+      }
+
       // Handle validation specifically for drag-and-drop items
       if (question.questionType === "drag-drop") {
         if (!Array.isArray(question.sources) || !Array.isArray(question.categories) || !question.correctMapping) {
@@ -88,15 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
         question.correctAnswer >= question.options.length
       ) {
         return `Question ${i + 1} has missing or invalid multiple-choice data.`;
-      }
-
-      if (
-        !validCriteria.some(
-          criterion =>
-            criterion.toLowerCase() === question.criterion.toLowerCase()
-        )
-      ) {
-        return `Question ${i + 1} has an unrecognized criterion: ${question.criterion}`;
       }
 
       if (
@@ -195,8 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
     feedbackBox.replaceChildren();
 
     if (question.questionType === "drag-drop") {
-      // Hide standard multiple-choice view elements
-      hide(document.getElementById("source-card"));
+      // Hide standard multiple-choice view elements and hide the main source card since sources are embedded in drag-drop
+      const sourceCard = document.getElementById("source-card");
+      if (sourceCard) hide(sourceCard);
       hide(answerOptions);
       show(dragDropContainer);
       hide(submitButton); // Handled inside dragDropApp.js render logic
@@ -217,7 +218,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } else {
       // Standard Multiple Choice Display
-      show(document.getElementById("source-card"));
+      const sourceCard = document.getElementById("source-card");
+      if (sourceCard) show(sourceCard);
       show(answerOptions);
       hide(dragDropContainer);
 
