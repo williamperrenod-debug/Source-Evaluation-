@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
- <header class="site-header">
+  <header class="site-header">
     <div class="container">
       <p class="eyebrow">Information Literacy Activity</p>
       <h1><a href="https://williamperrenod-debug.github.io/Source-Evaluation-/" class="header-home-link">Source Evaluation</a></h1>
@@ -17,12 +17,11 @@
   </header>
 
   <main class="container">
-   <section class="intro-card" aria-labelledby="activity-title">
+    <section class="intro-card" aria-labelledby="activity-title">
       <h2 id="activity-title">Student Activity</h2>
       <p>
-        11 Questions - Practice evaluating information sources by considering four core factors:
-        <strong>authority</strong>, <strong>evidence</strong>, <strong>relevance</strong>,
-        and <strong>currency</strong>.
+        11 Questions - Practice evaluating information sources by considering four core factors: 
+        <strong>authority</strong>, <strong>evidence</strong>, <strong>relevance</strong>, and <strong>currency</strong>.
       </p>
 
       <!-- Student Success Prep Accordion -->
@@ -30,14 +29,30 @@
         <summary><strong>Quick Study Guide: Core Evaluation Criteria</strong></summary>
         <div class="prep-content">
           <p>
-            Before you begin, keep these principles from the 
-            <a href="https://oercommons.org/courseware/lesson/93901" target="_blank" rel="noopener noreferrer">ACRL Framework Guide</a> in mind:
+            Before you begin, review these core principles adapted from the 
+            <a href="https://oercommons.org/courseware/lesson/93901" target="_blank" rel="noopener noreferrer">ACRL Framework Guide</a>:
           </p>
           <ul>
-            <li><strong>Authority is Contextual:</strong> Expertise depends on the specific research question, not just a generic title.</li>
-            <li><strong>Evidence as a Process:</strong> Look past surface claims to verify original methodologies and citations.</li>
-            <li><strong>Relevance:</strong> Match the scope, population, and context of the source directly to your topic.</li>
-            <li><strong>Currency:</strong> Consider whether your topic requires real-time updates or timeless historical context.</li>
+            <li>
+              <strong>1. Authority is Constructed and Contextual</strong><br>
+              <em>Core Principle:</em> Authority is not a simple binary or a rigid credential (such as assuming a PhD automatically makes an author infallible on every topic). Society constructs who we perceive as authoritative, but true authority depends entirely on the context of your specific information need.<br>
+              <em>In Practice:</em> Evaluate an author's credentials, disciplinary expertise, and institutional affiliations relative to your research question. A local resident brings vital community perspective to an environmental issue, while a public health researcher brings methodological expertise. Always maintain an attitude of informed skepticism.
+            </li>
+            <li>
+              <strong>2. Evidence as a Process (Information Creation as a Process)</strong><br>
+              <em>Core Principle:</em> Information is intentional. Every format—from a casual social media post or blog to a peer-reviewed scholarly article—undergoes a distinct creation process that shapes its message, authority, and reception.<br>
+              <em>In Practice:</em> Look past surface claims, precise statistics, or flashy layouts. Trace claims back to their original methodology, examine underlying research papers, and verify whether hyperlinks or citations actually substantiate the author's arguments rather than merely decorating them.
+            </li>
+            <li>
+              <strong>3. Relevance (Matching Scope & Context)</strong><br>
+              <em>Core Principle:</em> A source's utility is relative to your specific research parameters. A source can be brilliantly written and historically accurate, yet completely irrelevant if its scope, population, or setting does not align with your thesis.<br>
+              <em>In Practice:</em> Ensure that the population, geographical setting, and thematic focus of your sources directly address your research question. Use broad background sources for preliminary orientation, but rely on targeted, scope-matched evidence to build your core arguments.
+            </li>
+            <li>
+              <strong>4. Currency & The Scholarly Conversation</strong><br>
+              <em>Core Principle:</em> Research is an ongoing, evolving dialogue among scholars and professionals. Currency matters deeply in fast-moving fields (like technology or public health), whereas contemporaneous primary sources are essential when conducting historical research.<br>
+              <em>In Practice:</em> Check publication dates to determine whether your topic requires real-time guidance or historical context. Recognize that when you incorporate and cite sources, you are actively entering and contributing to an ongoing scholarly conversation.
+            </li>
           </ul>
         </div>
       </details>
@@ -53,14 +68,12 @@
         <span id="progress-text">Question 1 of 10</span>
         <span id="score-text">Score: 0</span>
       </div>
-
       <div class="progress-bar" aria-label="Activity progress">
         <div id="progress-fill" class="progress-fill"></div>
       </div>
-
       <p id="criterion-label" class="criterion-label">Criterion: Authority</p>
       <h2 id="question-heading">Question text will appear here.</h2>
-
+      
       <div id="source-card" class="source-card">
         <h3 id="source-title">Source</h3>
         <p id="source-description"></p>
@@ -92,14 +105,14 @@
 
   <footer class="site-footer">
     <div class="container">
-      <P>This project, Source Evaluation: Information Literacy Student Practice, developed by William Perrenod, is licensed under the Creative Commons Attribution 4.0 International License</P>
+      <p>This project, Source Evaluation: Information Literacy Student Practice, developed by William Perrenod, is licensed under the Creative Commons Attribution 4.0 International License</p>
     </div>
   </footer>
 
- <!-- Load Data and Logic Files -->
-<script src="questions.js" defer></script>
-<script src="dragDropQuestions.js" defer></script>
-<script src="dragDropApp.js" defer></script>
-<script src="app.js" defer></script>
+  <!-- Load Data and Logic Files -->
+  <script src="questions.js" defer></script>
+  <script src="dragDropQuestions.js" defer></script>
+  <script src="dragDropApp.js" defer></script>
+  <script src="app.js" defer></script>
 </body>
 </html>
