@@ -26,12 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const finalScore = document.getElementById("final-score");
   const resultsMessage = document.getElementById("results-message");
 
-  // Load question banks safely from window scopes and local arrays
-  const rawMCQuestions = (typeof questions !== "undefined") ? questions : (window.questions || []);
-  const rawDDQuestions = (typeof dragDropQuestions !== "undefined") ? dragDropQuestions : (window.dragDropQuestions || []);
+  // Load question banks safely ensuring standard multiple-choice and drag-drop are included
+  const questionBank = (typeof questions !== "undefined" && Array.isArray(questions)) 
+    ? questions 
+    : (window.questions && Array.isArray(window.questions) ? window.questions : []);
 
-  const questionBank = Array.isArray(rawMCQuestions) ? rawMCQuestions : [];
-  const dragDropBank = Array.isArray(rawDDQuestions) ? rawDDQuestions : [];
+  const dragDropBank = (typeof dragDropQuestions !== "undefined" && Array.isArray(dragDropQuestions)) 
+    ? dragDropQuestions 
+    : (window.dragDropQuestions && Array.isArray(window.dragDropQuestions) ? window.dragDropQuestions : []);
 
   // Combine both banks into a unified activity pool, tagging types appropriately
   const combinedQuestionBank = [
