@@ -26,18 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const finalScore = document.getElementById("final-score");
   const resultsMessage = document.getElementById("results-message");
 
-  // Load question banks (standard multiple choice + optional drag & drop pool)
-  const questionBank =
-    typeof questions !== "undefined"
-      ? questions
-      : window.questions || [];
+  // Load question banks safely from window scopes and local arrays
+  const rawMCQuestions = (typeof questions !== "undefined") ? questions : (window.questions || []);
+  const rawDDQuestions = (typeof dragDropQuestions !== "undefined") ? dragDropQuestions : (window.dragDropQuestions || []);
 
-  const dragDropBank =
-    typeof dragDropQuestions !== "undefined"
-      ? dragDropQuestions
-      : window.dragDropQuestions || [];
+  const questionBank = Array.isArray(rawMCQuestions) ? rawMCQuestions : [];
+  const dragDropBank = Array.isArray(rawDDQuestions) ? rawDDQuestions : [];
 
-  // Combine both banks into a unified activity pool, safely defaulting question types
+  // Combine both banks into a unified activity pool, tagging types appropriately
   const combinedQuestionBank = [
     ...questionBank.map(q => ({ ...q, questionType: q.questionType || "mc" })),
     ...dragDropBank.map(q => ({ ...q, questionType: q.questionType || "drag-drop" }))
@@ -58,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----- Validate the question data -----
   function validateQuestionBank(bank) {
     if (!Array.isArray(bank) || bank.length === 0) {
-      return "No questions were found. Check that questions.js loads an array of questions.";
+      return "No questions were found. Check that questions.js and dragDropQuestions.js load properly.";
     }
 
     for (let i = 0; i < bank.length; i++) {
