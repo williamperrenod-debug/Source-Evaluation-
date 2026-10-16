@@ -64,17 +64,20 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 0; i < bank.length; i++) {
       const question = bank[i];
 
-      if (question.questionType === "drag-drop") {
-        if (!question.criterion || !question.scenario || !Array.isArray(question.sources) || !Array.isArray(question.categories)) {
-          return `Drag-and-drop question ${i + 1} has missing or invalid data.`;
-        }
-        continue;
+      if (!question || typeof question.criterion !== "string" || typeof question.scenario !== "string") {
+        return `Question ${i + 1} has missing basic criteria or scenarios.`;
       }
 
+      // Handle validation specifically for drag-and-drop items
+      if (question.questionType === "drag-drop") {
+        if (!Array.isArray(question.sources) || !Array.isArray(question.categories) || !question.correctMapping) {
+          return `Drag-and-drop question ${i + 1} has missing sources, categories, or correct mapping data.`;
+        }
+        continue; // Skip standard MC checks for this item
+      }
+
+      // Handle validation for Standard Multiple Choice items
       if (
-        !question ||
-        typeof question.criterion !== "string" ||
-        typeof question.scenario !== "string" ||
         !question.source ||
         typeof question.source.title !== "string" ||
         typeof question.source.description !== "string" ||
@@ -84,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         question.correctAnswer < 0 ||
         question.correctAnswer >= question.options.length
       ) {
-        return `Question ${i + 1} has missing or invalid data. Check questions.js.`;
+        return `Question ${i + 1} has missing or invalid multiple-choice data.`;
       }
 
       if (
