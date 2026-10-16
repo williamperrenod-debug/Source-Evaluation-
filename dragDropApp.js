@@ -1,11 +1,8 @@
 "use strict";
 
-function renderDragDropQuestion(questionObj, containerElement) {
+function renderDragDropQuestion(questionObj, containerElement, onCompleteCallback) {
   containerElement.innerHTML = `
     <div class="question-card" data-id="${questionObj.id}">
-      <span class="criterion-badge">${questionObj.criterion}</span>
-      <p class="scenario">${questionObj.scenario}</p>
-      
       <div class="drag-drop-layout">
         <!-- Pool of draggable sources -->
         <div class="sources-pool" id="pool-${questionObj.id}">
@@ -28,16 +25,18 @@ function renderDragDropQuestion(questionObj, containerElement) {
         </div>
       </div>
       
-      <button id="submit-${questionObj.id}" class="submit-btn" style="margin-top: 15px;">Check Answer</button>
-      <div id="feedback-${questionObj.id}" class="feedback-container"></div>
+      <button id="submit-dd-${questionObj.id}" class="primary-button" style="margin-top: 15px;">Check Answer</button>
+      <div id="feedback-dd-${questionObj.id}" class="feedback hidden" role="status" aria-live="polite"></div>
     </div>
   `;
 
   const draggables = containerElement.querySelectorAll('.draggable-item');
   const dropZones = containerElement.querySelectorAll('.drop-zone');
   const sourcePool = containerElement.querySelector(`#pool-${questionObj.id}`);
+  const submitBtn = containerElement.querySelector(`#submit-dd-${questionObj.id}`);
+  const feedbackEl = containerElement.querySelector(`#feedback-dd-${questionObj.id}`);
 
-  // Track drag states
+  // HTML5 Drag and Drop Handlers
   draggables.forEach(item => {
     item.addEventListener('dragstart', (e) => {
       item.classList.add('dragging');
@@ -49,7 +48,6 @@ function renderDragDropQuestion(questionObj, containerElement) {
     });
   });
 
-  // Enable drop handling for target zones and returning to pool
   [...dropZones, sourcePool].forEach(zone => {
     zone.addEventListener('dragover', (e) => {
       e.preventDefault();
@@ -69,18 +67,18 @@ function renderDragDropQuestion(questionObj, containerElement) {
     });
   });
 
-  // Evaluation Handler
-  const submitBtn = containerElement.querySelector(`#submit-${questionObj.id}`);
+  // Submission & Validation Logic
   submitBtn.addEventListener('click', () => {
-    let allCorrect = true;
     let unplacedItems = sourcePool.querySelectorAll('.draggable-item').length;
-    const feedbackEl = containerElement.querySelector(`#feedback-${questionObj.id}`);
 
     if (unplacedItems > 0) {
-      feedbackEl.innerHTML = `<p style="color: #d97706; font-weight: bold;">Please place all sources into a category before checking your answer.</p>`;
+      feedbackEl.className = "feedback feedback-warning";
+      feedbackEl.textContent = "Please place all sources into a category before checking your answer.";
+      feedbackEl.classList.remove("hidden");
       return;
     }
 
+    let allCorrect = true;
     dropZones.forEach(zone => {
       const catId = zone.dataset.categoryId;
       const items = zone.querySelectorAll('.draggable-item');
@@ -93,10 +91,28 @@ function renderDragDropQuestion(questionObj, containerElement) {
       });
     });
 
-    if (allCorrect) {
-      feedbackEl.innerHTML = `<p style="color: #16a34a; font-weight: bold;">${questionObj.feedback.correct}</p>`;
-    } else {
-      feedbackEl.innerHTML = `<p style="color: #dc2626; font-weight: bold;">${questionObj.feedback.incorrect}</p>`;
+    // Display feedback message
+    feedbackEl.replaceChildren();
+    const heading = document.createElement("strong");
+    heading.textContent = allCorrect ? "Correct!" : "Not quite.";
+    const explanation = document.createElement("p");
+    explanation.textContent = allCorrect ? questionObj.feedback.correct : questionObj.feedback.incorrect;
+
+    feedbackEl.append(heading, explanation);
+    feedbackEl.className = allCorrect ? "feedback feedback-correct" : "feedback feedback-incorrect";
+    feedbackEl.classList.remove("hidden");
+
+    // Lock draggables after submission
+    draggables.forEach(item => {
+      item.setAttribute('draggable', 'false');
+      item.style.cursor = 'default';
+    });
+
+    submitBtn.disabled = true;
+
+    // Trigger callback back to app.js to update score and show "Next Question" button
+    if (typeof onCompleteCallback === "function") {
+      onCompleteCallback(allCorrect);
     }
   });
 }
