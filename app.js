@@ -26,19 +26,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const finalScore = document.getElementById("final-score");
   const resultsMessage = document.getElementById("results-message");
 
-  // Load question banks safely ensuring standard multiple-choice and drag-drop are included
-  const questionBank = (typeof questions !== "undefined" && Array.isArray(questions)) 
+  // ----- Safely gather question banks -----
+  const mcPool = (typeof questions !== "undefined" && Array.isArray(questions)) 
     ? questions 
     : (window.questions && Array.isArray(window.questions) ? window.questions : []);
 
-  const dragDropBank = (typeof dragDropQuestions !== "undefined" && Array.isArray(dragDropQuestions)) 
+  const ddPool = (typeof dragDropQuestions !== "undefined" && Array.isArray(dragDropQuestions)) 
     ? dragDropQuestions 
     : (window.dragDropQuestions && Array.isArray(window.dragDropQuestions) ? window.dragDropQuestions : []);
 
-  // Combine both banks into a unified activity pool, tagging types appropriately
+  // Combine multiple choice and drag-and-drop items into one master pool
   const combinedQuestionBank = [
-    ...questionBank.map(q => ({ ...q, questionType: q.questionType || "mc" })),
-    ...dragDropBank.map(q => ({ ...q, questionType: q.questionType || "drag-drop" }))
+    ...mcPool.map(q => ({ ...q, questionType: "mc" })),
+    ...ddPool.map(q => ({ ...q, questionType: "drag-drop" }))
   ];
 
   const validCriteria = [
@@ -66,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return `Question ${i + 1} has missing basic criteria or scenarios.`;
       }
 
-      // Validate that the criterion string matches one of our recognized values case-insensitively
       const matchesCriterion = validCriteria.some(
         criterion => criterion.toLowerCase() === question.criterion.trim().toLowerCase()
       );
@@ -75,15 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return `Question ${i + 1} has an unrecognized criterion: "${question.criterion}"`;
       }
 
-      // Handle validation specifically for drag-and-drop items
       if (question.questionType === "drag-drop") {
         if (!Array.isArray(question.sources) || !Array.isArray(question.categories) || !question.correctMapping) {
           return `Drag-and-drop question ${i + 1} has missing sources, categories, or correct mapping data.`;
         }
-        continue; // Skip standard MC checks for this item
+        continue;
       }
 
-      // Handle validation for Standard Multiple Choice items
       if (
         !question.source ||
         typeof question.source.title !== "string" ||
@@ -95,14 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
         question.correctAnswer >= question.options.length
       ) {
         return `Question ${i + 1} has missing or invalid multiple-choice data.`;
-      }
-
-      if (
-        question.options.some(
-          option => typeof option !== "string" || option.trim() === ""
-        )
-      ) {
-        return `Question ${i + 1} contains an empty or invalid answer option.`;
       }
     }
 
@@ -140,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const selected = answerOptions.querySelector(
       'input[name="answer"]:checked'
     );
-
     return selected ? Number(selected.value) : null;
   }
 
@@ -149,9 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const completed = currentQuestionIndex + (answerSubmitted ? 1 : 0);
     const percentage = (completed / total) * 100;
 
-    progressText.textContent =
-      `Question ${currentQuestionIndex + 1} of ${total}`;
-
+    progressText.textContent = `Question ${currentQuestionIndex + 1} of ${total}`;
     scoreText.textContent = `Score: ${score}`;
 
     progressFill.style.width = `${percentage}%`;
@@ -171,8 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Shuffle the question order for each attempt.
     for (let i = questionOrder.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [questionOrder[i], questionOrder[j]] =
-        [questionOrder[j], questionOrder[i]];
+      [questionOrder[i], questionOrder[j]] = [questionOrder[j], questionOrder[i]];
     }
 
     hide(introSection);
@@ -192,15 +177,14 @@ document.addEventListener("DOMContentLoaded", () => {
     hide(feedbackBox);
     feedbackBox.replaceChildren();
 
+    const sourceCard = document.getElementById("source-card");
+
     if (question.questionType === "drag-drop") {
-      // Hide standard multiple-choice view elements and hide the main source card since sources are embedded in drag-drop
-      const sourceCard = document.getElementById("source-card");
       if (sourceCard) hide(sourceCard);
       hide(answerOptions);
       show(dragDropContainer);
-      hide(submitButton); // Handled inside dragDropApp.js render logic
+      hide(submitButton);
 
-      // Render via dragDropApp.js function and hook up score tracking callback
       if (typeof renderDragDropQuestion === "function") {
         renderDragDropQuestion(question, dragDropContainer, (isCorrect) => {
           if (answerSubmitted) return;
@@ -215,8 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
         dragDropContainer.innerHTML = "<p style='color:red;'>Error: dragDropApp.js is not loaded correctly.</p>";
       }
     } else {
-      // Standard Multiple Choice Display
-      const sourceCard = document.getElementById("source-card");
       if (sourceCard) show(sourceCard);
       show(answerOptions);
       hide(dragDropContainer);
@@ -263,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (answerSubmitted) return;
 
     const question = getCurrentQuestion();
-    if (question.questionType === "drag-drop") return; // Handled separately
+    if (question.questionType === "drag-drop") return;
 
     const selectedIndex = getSelectedAnswerIndex();
 
