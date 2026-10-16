@@ -27,7 +27,6 @@ const questions = [
       ]
     }
   },
-
   {
     id: "Q02",
     criterion: "Authority",
@@ -51,7 +50,6 @@ const questions = [
       ]
     }
   },
-
   {
     id: "Q03",
     criterion: "Authority",
@@ -102,7 +100,6 @@ const questions = [
       ]
     }
   },
-
   {
     id: "Q05",
     criterion: "Evidence",
@@ -126,7 +123,6 @@ const questions = [
       ]
     }
   },
-
   {
     id: "Q06",
     criterion: "Evidence",
@@ -154,7 +150,7 @@ const questions = [
   // =========================================
   // INFORMATION HAS VALUE / RELEVANCE
   // =========================================
- {
+  {
     id: "Q07",
     criterion: "Relevance",
     scenario: "Your assignment asks how generative artificial intelligence impacts academic integrity in undergraduate computer science courses at U.S. universities. Which source is most directly relevant?",
@@ -177,6 +173,7 @@ const questions = [
       ]
     }
   },
+  {
     id: "Q08",
     criterion: "Relevance",
     scenario: "You are writing a college research paper about the effects of urban green spaces on neighborhood health. How should you evaluate a well-written article about the history of city parks that lacks health data?",
@@ -226,7 +223,6 @@ const questions = [
       ]
     }
   },
-
   {
     id: "Q10",
     criterion: "Currency",
