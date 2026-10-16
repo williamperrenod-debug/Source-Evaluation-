@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const sourceTitle = document.getElementById("source-title");
   const sourceDescription = document.getElementById("source-description");
   const answerOptions = document.getElementById("answer-options");
+  const dragDropContainer = document.getElementById("drag-drop-container");
 
   const feedbackBox = document.getElementById("feedback");
   const submitButton = document.getElementById("submit-button");
@@ -25,12 +26,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const finalScore = document.getElementById("final-score");
   const resultsMessage = document.getElementById("results-message");
 
-  // Questions may be declared with `const questions = [...]`
-  // in questions.js or assigned to `window.questions`.
+  // Load question banks (standard multiple choice + optional drag & drop pool)
   const questionBank =
     typeof questions !== "undefined"
       ? questions
       : window.questions;
+
+  const dragDropBank =
+    typeof dragDropQuestions !== "undefined"
+      ? dragDropQuestions
+      : window.dragDropQuestions || [];
+
+  // Combine both banks into a unified activity pool, tagging types appropriately
+  const combinedQuestionBank = [
+    ...questionBank.map(q => ({ ...q, questionType: "mc" })),
+    ...dragDropBank.map(q => ({ ...q, questionType: "drag-drop" }))
+  ];
 
   const validCriteria = [
     "Authority",
@@ -52,6 +63,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (let i = 0; i < bank.length; i++) {
       const question = bank[i];
+
+      if (question.questionType === "drag-drop") {
+        if (!question.criterion || !question.scenario || !Array.isArray(question.sources) || !Array.isArray(question.categories)) {
+          return `Drag-and-drop question ${i + 1} has missing or invalid data.`;
+        }
+        continue;
+      }
 
       if (
         !question ||
@@ -90,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return null;
   }
 
-  const dataError = validateQuestionBank(questionBank);
+  const dataError = validateQuestionBank(combinedQuestionBank);
 
   if (dataError) {
     startButton.disabled = true;
@@ -106,15 +124,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ----- Utility functions -----
   function show(element) {
-    element.classList.remove("hidden");
+    if (element) element.classList.remove("hidden");
   }
 
   function hide(element) {
-    element.classList.add("hidden");
+    if (element) element.classList.add("hidden");
   }
 
   function getCurrentQuestion() {
-    return questionBank[questionOrder[currentQuestionIndex]];
+    return combinedQuestionBank[questionOrder[currentQuestionIndex]];
   }
 
   function getSelectedAnswerIndex() {
@@ -144,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ----- Start or restart the activity -----
   function startActivity() {
-    questionOrder = questionBank.map((_, index) => index);
+    questionOrder = combinedQuestionBank.map((_, index) => index);
     currentQuestionIndex = 0;
     score = 0;
     answerSubmitted = false;
@@ -166,42 +184,69 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----- Display a question -----
   function displayQuestion() {
     const question = getCurrentQuestion();
-
     answerSubmitted = false;
 
     criterionLabel.textContent = `Criterion: ${question.criterion}`;
     questionHeading.textContent = question.scenario;
-    sourceTitle.textContent = question.source.title;
-    sourceDescription.textContent = question.source.description;
-
-    answerOptions.replaceChildren();
-
-    question.options.forEach((optionText, index) => {
-      const label = document.createElement("label");
-      label.className = "answer-option";
-      label.htmlFor = `answer-${index}`;
-
-      const input = document.createElement("input");
-      input.type = "radio";
-      input.name = "answer";
-      input.id = `answer-${index}`;
-      input.value = String(index);
-
-      const text = document.createElement("span");
-      text.textContent = optionText;
-
-      label.append(input, text);
-      answerOptions.appendChild(label);
-    });
-
     hide(feedbackBox);
     feedbackBox.replaceChildren();
 
-    submitButton.disabled = false;
-    submitButton.textContent = "Check Answer";
-    show(submitButton);
-    hide(nextButton);
+    if (question.questionType === "drag-drop") {
+      // Hide standard multiple-choice view elements
+      hide(document.getElementById("source-card"));
+      hide(answerOptions);
+      show(dragDropContainer);
+      hide(submitButton); // Handled inside dragDropApp.js render logic
 
+      // Render via dragDropApp.js function and hook up score tracking callback
+      if (typeof renderDragDropQuestion === "function") {
+        renderDragDropQuestion(question, dragDropContainer, (isCorrect) => {
+          if (answerSubmitted) return;
+          answerSubmitted = true;
+          if (isCorrect) {
+            score++;
+          }
+          show(nextButton);
+          updateProgress();
+        });
+      } else {
+        dragDropContainer.innerHTML = "<p style='color:red;'>Error: dragDropApp.js is not loaded correctly.</p>";
+      }
+    } else {
+      // Standard Multiple Choice Display
+      show(document.getElementById("source-card"));
+      show(answerOptions);
+      hide(dragDropContainer);
+
+      sourceTitle.textContent = question.source.title;
+      sourceDescription.textContent = question.source.description;
+
+      answerOptions.replaceChildren();
+
+      question.options.forEach((optionText, index) => {
+        const label = document.createElement("label");
+        label.className = "answer-option";
+        label.htmlFor = `answer-${index}`;
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = "answer";
+        input.id = `answer-${index}`;
+        input.value = String(index);
+
+        const text = document.createElement("span");
+        text.textContent = optionText;
+
+        label.append(input, text);
+        answerOptions.appendChild(label);
+      });
+
+      submitButton.disabled = false;
+      submitButton.textContent = "Check Answer";
+      show(submitButton);
+    }
+
+    hide(nextButton);
     nextButton.textContent =
       currentQuestionIndex === questionOrder.length - 1
         ? "View Results"
@@ -210,9 +255,12 @@ document.addEventListener("DOMContentLoaded", () => {
     updateProgress();
   }
 
-  // ----- Check the selected answer -----
+  // ----- Check the selected answer (Multiple Choice) -----
   function checkAnswer() {
     if (answerSubmitted) return;
+
+    const question = getCurrentQuestion();
+    if (question.questionType === "drag-drop") return; // Handled separately
 
     const selectedIndex = getSelectedAnswerIndex();
 
@@ -223,23 +271,18 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const question = getCurrentQuestion();
     const isCorrect = selectedIndex === question.correctAnswer;
-
     answerSubmitted = true;
 
     if (isCorrect) {
       score++;
     }
 
-  const feedback = question.feedback || {};
-    
-    // Determine the correct message based on whether the selected index has tailored feedback
+    const feedback = question.feedback || {};
     let message = "";
     if (isCorrect) {
       message = feedback.correct || "Correct. You selected the best evaluation.";
     } else {
-      // Pull specific feedback for the chosen option, or fall back to a default message
       message = (feedback.options && feedback.options[selectedIndex]) 
         || feedback.incorrect 
         || "Not quite. Review the source information and consider why another option is stronger.";
@@ -260,7 +303,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     show(feedbackBox);
 
-    // Lock the answer choices after submission.
     answerOptions.querySelectorAll('input[name="answer"]').forEach(input => {
       input.disabled = true;
     });
@@ -269,7 +311,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (index === question.correctAnswer) {
         label.classList.add("answer-correct");
       }
-
       if (index === selectedIndex && !isCorrect) {
         label.classList.add("answer-incorrect");
       }
@@ -277,7 +318,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     hide(submitButton);
     show(nextButton);
-
     updateProgress();
   }
 
@@ -319,11 +359,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
- // ----- Connect the controls -----
+  // ----- Connect the controls -----
   startButton.addEventListener("click", startActivity);
   submitButton.addEventListener("click", checkAnswer);
   nextButton.addEventListener("click", nextQuestion);
   restartButton.addEventListener("click", startActivity);
-
-
-}); 
+});
